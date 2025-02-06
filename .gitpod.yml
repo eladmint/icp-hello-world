@@ -1,0 +1,20 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - init: |
+      wget https://sdk.dfinity.org/install.sh
+      chmod +x install.sh
+      ./install.sh
+      rm install.sh
+      dfx --version
+  - command: |
+      dfx start --clean --background
+
+ports:
+  - port: 8000
+    onOpen: open-preview
+
+vscode:
+  extensions:
+    - dfinity-foundation.vscode-motoko
