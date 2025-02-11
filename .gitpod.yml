@@ -1,19 +1,22 @@
-image:
-  file: .gitpod.Dockerfile
+ports:
+  - port: 4943 # ICP mainnet port
+    onOpen: open-preview
+  - port: 5173 # Flock frontend
+    onOpen: open-preview
 
 tasks:
-  - init: |
-      wget https://sdk.dfinity.org/install.sh
-      chmod +x install.sh
-      ./install.sh
-      rm install.sh
-      dfx --version
-  - command: |
-      dfx start --clean --background
+  - name: ICP Project
+    init: dfx start --clean && dfx deploy
+    command: npm start
 
-ports:
-  - port: 8000
-    onOpen: open-preview
+  - name: Flock Platform
+    init: |
+      git config --global core.sshCommand "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -F /dev/null"
+      cd flock && npm install
+    command: npm run dev
+
+env:
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
 vscode:
   extensions:
